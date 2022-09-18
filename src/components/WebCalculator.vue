@@ -10,7 +10,7 @@
           {{calculatorValue}}
         </p>
       </div>
-      <div class="buttons" :class="[{'yellow-button': ['C', 'AC', '*', '/', '-', '+', '='].includes(calculatorButton)}, {'big-button': [0].includes(calculatorButton)}]" @click="action(calculatorButton)" v-for="calculatorButton in calculatorButtons" :key="calculatorButton">
+      <div class="buttons" :class="[{'yellow-button': ['C', 'AC', '×', '÷', '-', '+', '='].includes(calculatorButton)}, {'big-button': [0].includes(calculatorButton)}]" @click="action(calculatorButton)" v-for="calculatorButton in calculatorButtons" :key="calculatorButton">
         {{calculatorButton}}
       </div>
     </div>
@@ -26,7 +26,7 @@ export default {
       calculatorValue: "",
       calculatorPreviousValue: '',
       calculatorOperator: "",
-      calculatorButtons: ['C', 'AC', '*', '/', 7, 8, 9, '-', 4, 5, 6, '+', 1, 2, 3, '=', 0, '.'],
+      calculatorButtons: ['C', 'AC', '×', '÷', 7, 8, 9, '-', 4, 5, 6, '+', 1, 2, 3, '=', 0, '.'],
     };
   },
   methods: {
@@ -43,15 +43,15 @@ export default {
       if(calculatorButton === 'AC'){
         this.calculatorValue = '';
       }
-      if(calculatorButton === '*' || calculatorButton === '-' || calculatorButton === '+'){
+      if(calculatorButton === '×' || calculatorButton === '-' || calculatorButton === '+'){
         this.calculatorOperator = calculatorButton;
         if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) 
+          this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue)
         }
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
-      if(calculatorButton === '/'){
+      if(calculatorButton === '÷'){
         if(this.calculatorValue == 0){
           this.calculatorValue = 'Nie można dzielić przez 0!';
           return;
@@ -64,7 +64,7 @@ export default {
         this.calculatorValue = '';
       }
       if(calculatorButton === '='){
-        if(this.calculatorValue == 0 && this.calculatorOperator == '/'){
+        if(this.calculatorValue == 0 && this.calculatorOperator == '÷'){
           console.log(this.calculatorOperator)
           this.calculatorValue = 'Nie można dzielić przez 0!';
           return;
@@ -75,7 +75,7 @@ export default {
           this.calculatorOperator = ''
           return;
         }
-        this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue);
+        this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
         this.calculatorPreviousValue = '';
         this.calculatorOperator = '';
       }
@@ -89,7 +89,8 @@ export default {
     max-width: 440px;
     margin: 50px auto;
     height: 450px;
-    background-color: rgb(73, 73, 73);
+    /* background-color: rgb(73, 73, 73); */
+    background-color: #333;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,7 +123,7 @@ export default {
   .buttons{
     width: calc(84% / 4);
     float: left;
-    background-color: rgb(54, 54, 54);
+    background-color: #363636;
     margin: 3% 2% 0 2%;
     display: flex;
     align-items: center;
@@ -130,9 +131,21 @@ export default {
     height: 45px;
     border-radius: 10px;
     color: white;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+    font-size: 18px;
+  }
+  .buttons:hover{
+    background-color: #474747;
   }
   .yellow-button{
-    background-color: rgb(196, 129, 5);
+    background-color: #c48105;
+    transition: all .1s ease-in-out;
+    font-weight: 500;
+    font-size: 22px;
+  }
+  .yellow-button:hover{
+    background-color: #d59216;
   }
   .big-button{
     width: 46%;
