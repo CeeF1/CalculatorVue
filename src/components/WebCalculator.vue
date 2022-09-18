@@ -85,6 +85,7 @@ export default {
 </script>
 
 <style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
   .container{
     max-width: 440px;
     margin: 50px auto;
@@ -96,6 +97,7 @@ export default {
     justify-content: center;
     border-radius: 10px;
     box-shadow: 2px 2px 20px #888888;
+    font-family: 'Open Sans', sans-serif;
   }
   .box{
     padding: 15px 0;
