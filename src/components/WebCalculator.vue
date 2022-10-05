@@ -27,6 +27,8 @@ export default {
       calculatorPreviousValue: '',
       calculatorOperator: "",
       calculatorButtons: ['C', 'AC', '×', '÷', 7, 8, 9, '-', 4, 5, 6, '+', 1, 2, 3, '=', 0, '.'],
+      beforeDot: "",
+      afterDot: "",
     };
   },
   methods: {
@@ -34,6 +36,21 @@ export default {
       if(!isNaN(calculatorButton) || calculatorButton === '.'){
         if(calculatorButton === '.' && this.calculatorValue.includes('.')) return;
         this.calculatorValue += calculatorButton;
+        // this.beforeDot = parseFloat(this.calculatorValue.split('.'[0]))
+        // this.afterDot = this.calculatorValue.split('.'[1])
+        // if(isNaN(this.beforeDot)){
+        //   this.calculatorValue = '';
+        // }else{
+        //   this.calculatorValue = this.beforeDot.tolocaleString('en', {
+        //     maximumFractionDigits: 0
+        //   })
+        // }
+        // if(this.afterDot != ''){
+        //   this.calculatorValue = this.beforeDot + '.' + this.afterDot;
+        // }else{
+        //   this.calculatorValue = this.beforeDot;
+        // }
+
       }
       if(calculatorButton === 'C'){
         this.calculatorValue = '';
@@ -46,8 +63,9 @@ export default {
       if(calculatorButton === '×' || calculatorButton === '-' || calculatorButton === '+'){
         this.calculatorOperator = calculatorButton;
         if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue)
+          this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
         }
+        
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
@@ -58,7 +76,7 @@ export default {
         } 
         this.calculatorOperator = calculatorButton;
         if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) 
+          this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
         }
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
@@ -76,6 +94,7 @@ export default {
           return;
         }
         this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
+        // this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue);
         this.calculatorPreviousValue = '';
         this.calculatorOperator = '';
       }
