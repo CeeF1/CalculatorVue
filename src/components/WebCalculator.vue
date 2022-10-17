@@ -29,11 +29,16 @@ export default {
       calculatorButtons: ['C', 'AC', '×', '÷', 7, 8, 9, '-', 4, 5, 6, '+', 1, 2, 3, '=', 0, '.'],
       beforeDot: "",
       afterDot: "",
+      result: false,
     };
   },
   methods: {
     action(calculatorButton){
       if(!isNaN(calculatorButton) || calculatorButton === '.'){
+        if(this.result === true) {
+          this.calculatorValue = '';
+          this.result = false
+        }
         if(calculatorButton === '.' && this.calculatorValue.includes('.')) return;
         this.calculatorValue += calculatorButton;
         // this.beforeDot = parseFloat(this.calculatorValue.split('.'[0]))
@@ -61,30 +66,26 @@ export default {
         this.calculatorValue = '';
       }
       if(calculatorButton === '×' || calculatorButton === '-' || calculatorButton === '+'){
+        if(this.calculatorPreviousValue !== "") this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
         this.calculatorOperator = calculatorButton;
-        if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
-        }
-        
+        if(calculatorButton == '×') this.calculatorOperator = '*'
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
       if(calculatorButton === '÷'){
-        if(this.calculatorValue == 0){
-          this.calculatorValue = 'Nie można dzielić przez 0!';
-          return;
-        } 
         this.calculatorOperator = calculatorButton;
+        if(calculatorButton == '÷') this.calculatorOperator = '/'
         if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
+          this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
         }
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
       if(calculatorButton === '='){
-        if(this.calculatorValue == 0 && this.calculatorOperator == '÷'){
-          console.log(this.calculatorOperator)
+        if(this.calculatorValue == 0 && this.calculatorOperator == '/'){
           this.calculatorValue = 'Nie można dzielić przez 0!';
+          this.calculatorPreviousValue = '';
+          this.calculatorOperator = ''
           return;
         } 
         if(this.calculatorValue == ''){
@@ -93,11 +94,15 @@ export default {
           this.calculatorOperator = ''
           return;
         }
-        this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
+        this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
         // this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue);
         this.calculatorPreviousValue = '';
         this.calculatorOperator = '';
+        this.result = true
       }
+    },
+    numbersRound(previous, operator, current) {
+      return Math.round(eval(previous + operator + current) * 100000000) / 100000000 ;
     }
   },
 }
