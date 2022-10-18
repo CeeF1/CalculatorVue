@@ -34,12 +34,14 @@ export default {
   },
   methods: {
     action(calculatorButton){
+      
       if(!isNaN(calculatorButton) || calculatorButton === '.'){
         if(this.result === true) {
           this.calculatorValue = '';
           this.result = false
         }
         if(calculatorButton === '.' && this.calculatorValue.includes('.')) return;
+        if(this.calculatorValue.length >= 30) return;
         this.calculatorValue += calculatorButton;
         // this.beforeDot = parseFloat(this.calculatorValue.split('.'[0]))
         // this.afterDot = this.calculatorValue.split('.'[1])
@@ -66,18 +68,16 @@ export default {
         this.calculatorValue = '';
       }
       if(calculatorButton === '×' || calculatorButton === '-' || calculatorButton === '+'){
-        if(this.calculatorPreviousValue !== "") this.calculatorValue = Math.round(eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue) * 100000000) / 100000000 ;
+        if(this.calculatorPreviousValue !== "") this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
         this.calculatorOperator = calculatorButton;
         if(calculatorButton == '×') this.calculatorOperator = '*'
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
       if(calculatorButton === '÷'){
-        this.calculatorOperator = calculatorButton;
-        if(calculatorButton == '÷') this.calculatorOperator = '/'
-        if(this.calculatorPreviousValue !== ""){
-          this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
-        }
+        if(this.calculatorPreviousValue !== "") this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
+        this.calculatorOperator = '/'
+        
         this.calculatorPreviousValue = this.calculatorValue;
         this.calculatorValue = '';
       }
@@ -86,6 +86,7 @@ export default {
           this.calculatorValue = 'Nie można dzielić przez 0!';
           this.calculatorPreviousValue = '';
           this.calculatorOperator = ''
+          this.result = true
           return;
         } 
         if(this.calculatorValue == ''){
@@ -95,7 +96,6 @@ export default {
           return;
         }
         this.calculatorValue = this.numbersRound(this.calculatorPreviousValue, this.calculatorOperator, this.calculatorValue)
-        // this.calculatorValue = eval(this.calculatorPreviousValue + this.calculatorOperator + this.calculatorValue);
         this.calculatorPreviousValue = '';
         this.calculatorOperator = '';
         this.result = true
